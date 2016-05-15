@@ -11,7 +11,11 @@ GEM
     tilt (2.0.2)
 
 PLATFORMS
+  java
   ruby
 
 DEPENDENCIES
   sinatra
+
+BUNDLED WITH
+   1.12.3

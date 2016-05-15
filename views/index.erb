@@ -1,0 +1,7 @@
+<ol>
+  <% @theFile = File.open("cake.list", "r") %>
+  <% @theFile.each_line do |line| %>
+    <li><%= line %></li>
+  <% end %>
+  <% @theFile.close %>
+</ol>

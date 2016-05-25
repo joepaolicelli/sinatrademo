@@ -15,14 +15,33 @@ def per_line(file_name)
   theFile.close
 end
 
+def store_cakes_from(file_name)
+  per_line(file_name) { |line|
+    frmt_line = line.delete("\n")
+
+    unless Cake.exists?(cake_name: frmt_line)
+      c = Cake.create(cake_name: frmt_line)
+    end
+  }
+end
+
+def get_cakes
+  Cake.find_each do |cake|
+    cn = cake.cake_name
+    yield cn
+  end
+end
+
 get '/*.json' do
   headers \
     "Content-type" => "application/json"
 
+  store_cakes_from "cake.list"
+
   @hsh = {}
   @count = 1
 
-  per_line("cake.list") { |line|
+  get_cakes { |line|
     @hsh[@count] = line.delete("\n")
     @count += 1
   }
@@ -31,9 +50,13 @@ get '/*.json' do
 end
 
 get '/' do
+  store_cakes_from "cake.list"
+
   @arr = Array.new
 
-  per_line("cake.list") { |line| @arr << line }
+  get_cakes { |line|
+    @arr << line
+  }
 
   erb :index
 end
